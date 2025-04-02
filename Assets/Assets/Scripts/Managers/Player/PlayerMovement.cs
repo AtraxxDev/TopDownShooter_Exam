@@ -10,7 +10,10 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-
+    public void SetSpeed(float speed)
+    {
+        moveSpeed = speed;
+    }
     public void Move(Vector2 inputDirection)
     {
         Vector3 moveDirection = new Vector3(inputDirection.x, 0, inputDirection.y);

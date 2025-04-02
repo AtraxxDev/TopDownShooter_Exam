@@ -9,7 +9,10 @@ public class PlayerAttack : MonoBehaviour, IAttackable
 
     private bool canShoot = true;
 
-
+    public void SetAttackRate(float rate)
+    {
+        fireRate = rate;
+    }
     public void Attack()
     {
         if (!canShoot) return;

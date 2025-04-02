@@ -32,7 +32,7 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        StartCoroutine(DeactivateBullet(2f)); // 2 segundos para desactivarse (ajustable)
+       // StartCoroutine(DeactivateBullet(2f)); // 2 segundos para desactivarse (ajustable)
     }
 
     private void OnDisable()
