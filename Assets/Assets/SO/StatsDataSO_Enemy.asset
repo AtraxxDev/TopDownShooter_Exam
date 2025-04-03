@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24cc99e9d82400045818e721b3ec6aef, type: 3}
   m_Name: StatsDataSO_Enemy
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 1
   moveSpeed: 3
   attackRate: 1

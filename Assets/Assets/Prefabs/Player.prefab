@@ -589,6 +589,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statsData: {fileID: 11400000, guid: 252d6deaeeb521a48b81483ce929c41b, type: 2}
+  currentMaxHealth: 0
+  currentShieldCapacity: 50
+  currentShieldRegenRate: 0.3
 --- !u!1 &4650905414603066800
 GameObject:
   m_ObjectHideFlags: 0

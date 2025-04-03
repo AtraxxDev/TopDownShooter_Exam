@@ -35,7 +35,7 @@ public class EnemyHealth : MonoBehaviour, IDamagable
     private void Die()
     {
         OnEnemyDeath?.Invoke();  
-        Destroy(gameObject); 
+        gameObject.SetActive(false);
     }
 
     public float GetMaxHealth()

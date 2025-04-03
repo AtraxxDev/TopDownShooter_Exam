@@ -25,6 +25,8 @@ public class AIEnemyController : MonoBehaviour
         playerTarget = FindFirstObjectByType<PlayerController>().transform;
     }
 
+
+
     private void Update()
     {
         if (playerTarget == null) return;
@@ -40,6 +42,15 @@ public class AIEnemyController : MonoBehaviour
             enemyAttack.Shoot(playerTarget.position);  // Dispara cuando está dentro del rango
         }
     }
+
+    public void SetDifficulty(float speed, float damage, float health)
+    {
+        // Actualiza las estadísticas del enemigo basadas en la dificultad de la oleada
+        enemyMovement.Initialize(speed); // Ajusta la velocidad de movimiento
+        enemyAttack.SetBulletDamage((int)damage);   // Ajusta el daño de las balas
+        enemyHealth.Initialize(health); // Ajusta la salud de los enemigos por oleada
+    }
+
 
     private void OnDrawGizmos()
     {

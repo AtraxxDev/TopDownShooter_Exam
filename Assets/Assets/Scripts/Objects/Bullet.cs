@@ -39,4 +39,9 @@ public class Bullet : MonoBehaviour
     {
         StopAllCoroutines();
     }
+
+    public void SetDamage(int newDamage)
+    {
+        damage = newDamage; // Cambia el daño de la bala
+    }
 }

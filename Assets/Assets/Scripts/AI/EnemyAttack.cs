@@ -8,12 +8,18 @@ public class EnemyAttack : MonoBehaviour
     private float attackRate;
     private float lastAttackTime;
     private GameObject shooter;
+    private int attackDamage;
 
     public void Initialize(float rate, BulletPool pool, GameObject shooterReference)
     {
         attackRate = rate;
         bulletPool = pool;
         shooter = shooterReference;
+    }
+
+    public void SetBulletDamage(int damage)
+    {
+        attackDamage = damage; // Cambia el daño de las balas cuando el enemigo sube de nivel
     }
 
     public void Shoot(Vector3 targetPosition)
@@ -25,8 +31,9 @@ public class EnemyAttack : MonoBehaviour
             // Dirección del disparo
             Vector3 direction = (targetPosition - firePoint.position).normalized;
 
-            // Disparar usando el BulletPool
-            bulletPool.FireBullet(firePoint.position, direction, shooter);
+            // Crear la bala desde el BulletPool y asignar el daño al Bullet
+            GameObject bullet = bulletPool.FireBullet(firePoint.position, direction, shooter);
+            bullet.GetComponent<Bullet>().SetDamage(attackDamage); // Se asigna el daño de la bala
         }
     }
 }
