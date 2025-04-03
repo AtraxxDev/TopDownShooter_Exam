@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour, IDamagable
 {
     [SerializeField] private StatsDataSO statsData;
+
     private float currentHealth;
     private float currentShield;
     private Coroutine shieldRegenCoroutine;
@@ -15,64 +16,75 @@ public class PlayerHealth : MonoBehaviour, IDamagable
     public float currentShieldRegenRate;
 
     public event Action OnPlayerDie;
+    public event Action OnHealthChanged;
+    public event Action OnShieldChanged;
+
+    private void Awake()
+    {
+        InitializeStats();
+    }
 
     public void InitializeStats()
     {
-        // Inicializamos las variables a los valores del ScriptableObject
         currentMaxHealth = statsData.maxHealth;
-        currentHealth = currentMaxHealth; // La salud inicial es igual al máximo
+        currentHealth = currentMaxHealth;
         currentShieldCapacity = statsData.shieldCapacity;
-        currentShield = currentShieldCapacity; // El escudo también empieza con su capacidad máxima
+        currentShield = currentShieldCapacity;
         currentShieldRegenRate = statsData.shieldRegenRate;
+
+        OnHealthChanged?.Invoke();
+        OnShieldChanged?.Invoke();
     }
 
     public void IncreaseMaxHealth(float amount)
     {
         currentMaxHealth += amount;
-        currentHealth = Mathf.Min(currentHealth, currentMaxHealth); // Aseguramos que la salud no exceda el nuevo máximo
+        currentHealth = Mathf.Min(currentHealth, currentMaxHealth);
+        OnHealthChanged?.Invoke();
     }
 
-    // Método para aumentar la capacidad del escudo
     public void IncreaseShieldCapacity(float amount)
     {
         currentShieldCapacity += amount;
-        currentShield = Mathf.Min(currentShield, currentShieldCapacity); // Aseguramos que el escudo no exceda la nueva capacidad
+        currentShield = Mathf.Min(currentShield, currentShieldCapacity);
+        OnShieldChanged?.Invoke();
     }
 
-    // Método para aumentar la tasa de regeneración del escudo
     public void IncreaseShieldRegenRate(float amount)
     {
         currentShieldRegenRate += amount;
     }
 
-    // Método para regenerar toda la vida
     public void RegenerateFullHealth()
     {
         currentHealth = currentMaxHealth;
+        OnHealthChanged?.Invoke();
     }
 
-    // Método para aplicar el daño
     public void TakeDamage(float damage)
     {
         isTakingDamage = true;
         if (shieldRegenCoroutine != null)
         {
-            StopCoroutine(shieldRegenCoroutine); // Si estaba regenerando el escudo, se detiene
+            StopCoroutine(shieldRegenCoroutine);
         }
 
         if (currentShield > 0)
         {
             float remainingDamage = damage - currentShield;
             currentShield = Mathf.Max(0, currentShield - damage);
+            OnShieldChanged?.Invoke();
 
             if (remainingDamage > 0)
             {
                 currentHealth = Mathf.Max(0, currentHealth - remainingDamage);
+                OnHealthChanged?.Invoke();
             }
         }
         else
         {
             currentHealth = Mathf.Max(0, currentHealth - damage);
+            OnHealthChanged?.Invoke();
         }
 
         if (currentHealth <= 0)
@@ -81,14 +93,13 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         }
         else
         {
-            // Se espera un tiempo antes de comenzar la regeneración del escudo
             StartCoroutine(ShieldRegenDelay());
         }
     }
 
     private IEnumerator ShieldRegenDelay()
     {
-        yield return new WaitForSeconds(3f); // Tiempo sin recibir daño antes de comenzar la regeneración
+        yield return new WaitForSeconds(3f);
         isTakingDamage = false;
         shieldRegenCoroutine = StartCoroutine(RegenerateShield());
     }
@@ -98,13 +109,17 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         while (currentShield < currentShieldCapacity && !isTakingDamage)
         {
             currentShield = Mathf.Min(currentShieldCapacity, currentShield + currentShieldRegenRate * Time.deltaTime);
+            OnShieldChanged?.Invoke();
             yield return null;
         }
     }
 
     private void Die()
     {
-        // Lógica de muerte
         OnPlayerDie?.Invoke();
+        gameObject.SetActive(false);
     }
+
+    public float GetHealthNormalized() => currentHealth / currentMaxHealth;
+    public float GetShieldNormalized() => currentShield / currentShieldCapacity;
 }
