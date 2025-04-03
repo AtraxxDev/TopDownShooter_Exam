@@ -34,8 +34,15 @@ public class EnemyHealth : MonoBehaviour, IDamagable
 
     private void Die()
     {
-        OnEnemyDeath?.Invoke();  
+        OnEnemyDeath?.Invoke();
+
+        if (UnityEngine.Random.Range(0f, 1f) <= 0.2f)
+        {
+            CoinManager.Instance.AddCoins(3); // Agregar 5 monedas al CoinManager
+        }
+
         gameObject.SetActive(false);
+        ScoreManager.Instance.IncreaseScore();
     }
 
     public float GetMaxHealth()
