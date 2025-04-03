@@ -12,8 +12,8 @@ public class PlayerHealth : MonoBehaviour, IDamagable
     private bool isTakingDamage;
 
     public float currentMaxHealth;
-    public float currentShieldCapacity;
-    public float currentShieldRegenRate;
+    public float currentShieldCapacity = 50;
+    public float currentShieldRegenRate = 1f;
 
     public event Action OnPlayerDie;
     public event Action OnHealthChanged;
@@ -28,9 +28,7 @@ public class PlayerHealth : MonoBehaviour, IDamagable
     {
         currentMaxHealth = statsData.maxHealth;
         currentHealth = currentMaxHealth;
-        currentShieldCapacity = statsData.shieldCapacity;
         currentShield = currentShieldCapacity;
-        currentShieldRegenRate = statsData.shieldRegenRate;
 
         OnHealthChanged?.Invoke();
         OnShieldChanged?.Invoke();

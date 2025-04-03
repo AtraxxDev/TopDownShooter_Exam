@@ -8,7 +8,4 @@ public class StatsDataSO : ScriptableObject
     public float moveSpeed = 5f;
     public float attackRate = 0.2f;
 
-    public float shieldCapacity = 50f;
-    public float shieldRegenRate = 2f;
-
 }
