@@ -3,38 +3,44 @@ using UnityEngine;
 
 public class CoinManager : MonoBehaviour
 {
-    // Instancia estática de la clase (Singleton)
     public static CoinManager Instance { get; private set; }
 
     public int coins = 0;
 
-    public event Action OnCoinsChanged;
+    public delegate void CoinsUpdate(int newAmount);
 
-    // Método que se llama al iniciar el juego para asegurarse de que solo haya una instancia
+    public CoinsUpdate OnCoinsUpdated;
+
     private void Awake()
     {
-        // Verificar si ya existe una instancia
         if (Instance == null)
         {
-            // Si no existe, asignar esta instancia
             Instance = this;
             DontDestroyOnLoad(gameObject); // Evitar que se destruya al cambiar de escena
         }
         else
         {
-            // Si ya existe, destruir este objeto
             Destroy(gameObject);
         }
     }
 
-    // Método para agregar monedas
+    public bool HasEnoughCoins(int amount) => coins >= amount;
+
+
     public void AddCoins(int amount)
     {
         coins += amount;
+        OnCoinsUpdated?.Invoke(coins);
         UpdateCoinDisplay();
     }
 
-    // Mostrar monedas en consola (se puede mejorar mostrando en UI)
+    public void SpendCoins(int amount)
+    {
+        if (coins < amount) return;
+        coins -= amount;
+        OnCoinsUpdated?.Invoke(coins);
+    }
+
     private void UpdateCoinDisplay()
     {
         Debug.Log("Coins: " + coins);
