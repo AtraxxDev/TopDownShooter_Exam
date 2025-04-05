@@ -11,12 +11,14 @@ public class AIEnemyController : MonoBehaviour
     private EnemyMovement enemyMovement;
     private EnemyAttack enemyAttack;
     private EnemyHealth enemyHealth;
+    private PlayerAnimations playerAnimations;
 
     private void Awake()
     {
         enemyMovement = GetComponent<EnemyMovement>();
         enemyAttack = GetComponent<EnemyAttack>();
         enemyHealth = GetComponent<EnemyHealth>();
+        playerAnimations = GetComponent<PlayerAnimations>();
 
         enemyMovement.Initialize(stats.moveSpeed);
         enemyAttack.Initialize(stats.attackRate, bulletPool, gameObject); // Se pasa BulletPool
@@ -36,10 +38,16 @@ public class AIEnemyController : MonoBehaviour
 
         // El enemigo siempre se mueve hacia el jugador
         enemyMovement.Move(direction);
+        playerAnimations.PlayAnimation(PlayerAnimationState.Walk);
 
         if (distance <= attackRange)
         {
             enemyAttack.Shoot(playerTarget.position);  // Dispara cuando está dentro del rango
+            playerAnimations.PlayAnimation(PlayerAnimationState.Shoot);
+        }
+        else
+        {
+            playerAnimations.PlayAnimation(PlayerAnimationState.Shoot,false);
         }
     }
 

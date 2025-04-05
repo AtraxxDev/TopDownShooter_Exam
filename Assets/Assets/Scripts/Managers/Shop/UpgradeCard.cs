@@ -13,10 +13,12 @@ public class UpgradeCard : MonoBehaviour
 
 
     private PlayerHealth playerHealth;
+    private PlayerAnimations playerAnimations;
 
     private void Start()
     {
         playerHealth = FindFirstObjectByType<PlayerHealth>();
+        playerAnimations = FindFirstObjectByType<PlayerAnimations>();
         upgradeButton.onClick.AddListener(BuyUpgrade);
         CoinManager.Instance.OnCoinsUpdated += UpdateUI; // Suscribirse al evento de monedas
 
@@ -57,6 +59,7 @@ public class UpgradeCard : MonoBehaviour
         CoinManager.Instance.SpendCoins(cost);
         UpgradeSystem.ApplyUpgrade(playerHealth, upgradeType, upgradeAmount);
         UpdateUI();
+        playerAnimations.PlayAnimation(PlayerAnimationState.Jump);
     }
 }
 

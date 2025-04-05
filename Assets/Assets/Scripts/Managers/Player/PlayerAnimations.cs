@@ -30,7 +30,7 @@ public class PlayerAnimations : MonoBehaviour,IAnimation
                 break;
 
             case PlayerAnimationState.Jump:
-                animator.SetBool(AnimJump, value);
+                animator.SetTrigger(AnimJump);
                 break;
 
             case PlayerAnimationState.Die:

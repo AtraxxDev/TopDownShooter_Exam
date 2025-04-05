@@ -7,7 +7,15 @@ public class PlayerController : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerAttack playerAttack;
     private PlayerHealth playerHealth;
-    PlayerAnimations playerAnimations;
+    private PlayerAnimations playerAnimations;
+
+    public bool isOpenShop;
+
+    private bool isWalking = false;
+    private float walkSFXCooldown = 0.5f; // Tiempo entre cada repetición del sonido
+    private float walkSFXTimer = 0f; // Temporizador que lleva el conteo
+    private float shootSFXCooldown = 0.1f; // Tiempo de espera entre disparos para el SFX
+    private float shootSFXTimer = 0f; // Temporizador para el sonido de disparo
 
     private void Awake()
     {
@@ -18,63 +26,69 @@ public class PlayerController : MonoBehaviour
         playerAnimations = GetComponent<PlayerAnimations>();
 
         playerHealth.OnPlayerDie += PlayerDie;
-
         playerHealth.InitializeStats();
-
-
     }
 
     private void Update()
     {
         playerMovement.RotateTowardsMouse(inputHandler.MousePosition);
 
-        if (inputHandler.isFiring)
+        if (inputHandler.isFiring && !isOpenShop)
         {
-            playerAttack.Attack();
-            playerAnimations.PlayAnimation(PlayerAnimationState.Shoot);
+            playerAttack.Attack();  // Realiza el ataque
+            playerAnimations.PlayAnimation(PlayerAnimationState.Shoot); // Reproduce la animación de disparo
+
+            // Verificamos si el temporizador de disparo ha llegado a 0
+            shootSFXTimer -= Time.deltaTime;
+
+            // Solo reproducimos el SFX si ha pasado el tiempo de cooldown
+            if (shootSFXTimer <= 0f)
+            {
+                AudioManager.Instance.PlaySFX(AudioManager.SFXType.Shoot);
+                shootSFXTimer = shootSFXCooldown; // Reiniciamos el temporizador
+            }
         }
         else
         {
-            playerAnimations.PlayAnimation(PlayerAnimationState.Shoot,false);
-
+            playerAnimations.PlayAnimation(PlayerAnimationState.Shoot, false);
         }
-
     }
+
     private void FixedUpdate()
     {
         playerMovement.Move(inputHandler.MoveInput);
-        playerAnimations.PlayAnimation(PlayerAnimationState.Walk);
 
-        if (inputHandler.MoveInput == Vector2.zero)
+        // Actualizamos el temporizador de caminar
+        walkSFXTimer -= Time.deltaTime;
+
+        if (inputHandler.MoveInput != Vector2.zero)
         {
-            playerAnimations.PlayAnimation(PlayerAnimationState.Walk,false);
+            playerAnimations.PlayAnimation(PlayerAnimationState.Walk);
 
+            if (walkSFXTimer <= 0f)
+            {
+                AudioManager.Instance.PlaySFX(AudioManager.SFXType.Walk);
+                walkSFXTimer = walkSFXCooldown;
+            }
         }
-
-
+        else
+        {
+            playerAnimations.PlayAnimation(PlayerAnimationState.Walk, false);
+            AudioManager.Instance.StopSFX(AudioManager.SFXType.Walk);
+        }
     }
 
     public void PlayerDie()
     {
         StartCoroutine(HandlePlayerDie());
     }
+
     public IEnumerator HandlePlayerDie()
     {
-        // Reproducir la animación de muerte
         playerAnimations.PlayAnimation(PlayerAnimationState.Die);
-
-        // Esperar hasta que la animación de muerte haya terminado
         AnimatorStateInfo stateInfo = playerAnimations.animator.GetCurrentAnimatorStateInfo(0);
-
-        // Esperar hasta que la animación termine
         yield return new WaitForSeconds(stateInfo.length);
 
-        // Después de que la animación de muerte termine, puedes hacer lo que sea necesario (ejemplo: desactivar al jugador)
-        gameObject.SetActive(false); // O cualquier otro comportamiento que quieras implementar
+        gameObject.SetActive(false);
     }
-
-  
-
-  
-
 }

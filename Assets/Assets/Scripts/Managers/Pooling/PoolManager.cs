@@ -4,13 +4,14 @@ using UnityEngine;
 public class PoolManager : MonoBehaviour
 {
     public GameObject prefabToCreate;
-    public int initialPoolSize = 10; 
-    public List<GameObject> createdObjects;
+    public int initialPoolSize = 10;
+    public List<GameObject> createdObjects = new List<GameObject>();
 
+    public int maxPoolSize = 100; // Opcional: máximo de objetos que puede crear
 
     private void Start()
     {
-        InitializePool(); // Inicializa el pool al iniciar
+        InitializePool();
     }
 
     private void InitializePool()
@@ -18,14 +19,19 @@ public class PoolManager : MonoBehaviour
         for (int i = 0; i < initialPoolSize; i++)
         {
             GameObject obj = Instantiate(prefabToCreate);
-            obj.SetActive(false); // Lo desactivamos para que esté disponible en el pool
+            obj.SetActive(false);
             createdObjects.Add(obj);
         }
     }
 
-    // Método que pedirá un objeto del pool, si no hay disponibles, crea uno nuevo
     public GameObject AskForObject(Vector3 positionToSpawn)
     {
+        if (prefabToCreate == null)
+        {
+            Debug.LogError("Prefab no asignado al PoolManager.");
+            return null;
+        }
+
         foreach (var obj in createdObjects)
         {
             if (!obj.activeInHierarchy)
@@ -36,10 +42,16 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        // Si no se encuentra ninguno, crear un nuevo objeto
-        GameObject createdObject = Instantiate(prefabToCreate, positionToSpawn, Quaternion.identity);
-        createdObjects.Add(createdObject);
-        return createdObject;
+        // Si todos están activos y aún no se llegó al límite, crea uno nuevo
+        if (createdObjects.Count < maxPoolSize)
+        {
+            GameObject createdObject = Instantiate(prefabToCreate, positionToSpawn, Quaternion.identity);
+            createdObjects.Add(createdObject);
+            return createdObject;
+        }
+
+        Debug.LogWarning("Pool alcanzó el máximo de objetos permitidos.");
+        return null;
     }
 
     public virtual void StartFunction() { }

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 1
   moveSpeed: 3
-  attackRate: 1
+  attackRate: 3

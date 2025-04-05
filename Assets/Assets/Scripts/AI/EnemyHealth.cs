@@ -39,6 +39,7 @@ public class EnemyHealth : MonoBehaviour, IDamagable
         if (UnityEngine.Random.Range(0f, 1f) <= 0.2f)
         {
             CoinManager.Instance.AddCoins(3); // Agregar 5 monedas al CoinManager
+            // aqui iria el sonido de añadir una moneda
         }
 
         gameObject.SetActive(false);

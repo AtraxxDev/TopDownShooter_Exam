@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
@@ -8,6 +9,9 @@ public class ScoreManager : MonoBehaviour
     public int score = 0;
 
     public event Action OnScoreChenge;
+
+    public TMP_Text scoreText;
+
 
     private void Awake()
     {
@@ -34,6 +38,7 @@ public class ScoreManager : MonoBehaviour
 
     private void UpdateScoreDisplay()
     {
+        scoreText.text = ("Score: " + score.ToString());
         Debug.Log("Score: " + score);
     }
 }

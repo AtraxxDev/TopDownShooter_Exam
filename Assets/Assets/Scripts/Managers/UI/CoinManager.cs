@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class CoinManager : MonoBehaviour
@@ -10,6 +11,8 @@ public class CoinManager : MonoBehaviour
     public delegate void CoinsUpdate(int newAmount);
 
     public CoinsUpdate OnCoinsUpdated;
+
+    public TMP_Text coinsText;
 
     private void Awake()
     {
@@ -43,6 +46,7 @@ public class CoinManager : MonoBehaviour
 
     private void UpdateCoinDisplay()
     {
+        coinsText.text = ("Coins: " + coins.ToString());
         Debug.Log("Coins: " + coins);
     }
 }
