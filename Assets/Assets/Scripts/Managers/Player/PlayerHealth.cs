@@ -115,7 +115,6 @@ public class PlayerHealth : MonoBehaviour, IDamagable
     private void Die()
     {
         OnPlayerDie?.Invoke();
-        gameObject.SetActive(false);
     }
 
     public float GetHealthNormalized() => currentHealth / currentMaxHealth;
