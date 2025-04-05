@@ -12,10 +12,10 @@ public class PlayerController : MonoBehaviour
     public bool isOpenShop;
 
     private bool isWalking = false;
-    private float walkSFXCooldown = 0.5f; // Tiempo entre cada repetición del sonido
-    private float walkSFXTimer = 0f; // Temporizador que lleva el conteo
-    private float shootSFXCooldown = 0.1f; // Tiempo de espera entre disparos para el SFX
-    private float shootSFXTimer = 0f; // Temporizador para el sonido de disparo
+    private float walkSFXCooldown = 0.5f;
+    private float walkSFXTimer = 0f;
+    private float shootSFXCooldown = 0.1f;
+    private float shootSFXTimer = 0f;
 
     private void Awake()
     {
@@ -33,24 +33,32 @@ public class PlayerController : MonoBehaviour
     {
         playerMovement.RotateTowardsMouse(inputHandler.MousePosition);
 
+        // Disparo de balas normales
         if (inputHandler.isFiring && !isOpenShop)
         {
-            playerAttack.Attack();  // Realiza el ataque
-            playerAnimations.PlayAnimation(PlayerAnimationState.Shoot); // Reproduce la animación de disparo
+            playerAttack.Attack();
+            playerAnimations.PlayAnimation(PlayerAnimationState.Shoot);
 
-            // Verificamos si el temporizador de disparo ha llegado a 0
             shootSFXTimer -= Time.deltaTime;
 
-            // Solo reproducimos el SFX si ha pasado el tiempo de cooldown
             if (shootSFXTimer <= 0f)
             {
                 AudioManager.Instance.PlaySFX(AudioManager.SFXType.Shoot);
-                shootSFXTimer = shootSFXCooldown; // Reiniciamos el temporizador
+                shootSFXTimer = shootSFXCooldown;
             }
         }
         else
         {
             playerAnimations.PlayAnimation(PlayerAnimationState.Shoot, false);
+        }
+
+        // Disparo de misiles
+        if (inputHandler.isFiringMissile && !isOpenShop)
+        {
+            playerAttack.AttackMissile();
+            playerAnimations.PlayAnimation(PlayerAnimationState.Shoot);
+
+            // Reproducir sonido de disparo de misil si es necesario (si no lo haces con AudioManager ya)
         }
     }
 
@@ -58,11 +66,9 @@ public class PlayerController : MonoBehaviour
     {
         playerMovement.Move(inputHandler.MoveInput);
 
-        // Actualizamos el temporizador de caminar
-        walkSFXTimer -= Time.deltaTime;
-
         if (inputHandler.MoveInput != Vector2.zero)
         {
+            walkSFXTimer -= Time.deltaTime;
             playerAnimations.PlayAnimation(PlayerAnimationState.Walk);
 
             if (walkSFXTimer <= 0f)

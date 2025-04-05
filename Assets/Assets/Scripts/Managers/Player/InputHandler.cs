@@ -7,6 +7,7 @@ public class InputHandler : MonoBehaviour
     public Vector2 MousePosition { get; private set; }
 
     public bool isFiring { get; private set; }
+    public bool isFiringMissile { get; private set; }  // Nueva propiedad para los misiles
 
     private Player_Actions playerActions;
 
@@ -22,5 +23,8 @@ public class InputHandler : MonoBehaviour
 
         playerActions.Player.FireBullets.performed += ctz => isFiring = true;
         playerActions.Player.FireBullets.canceled += ctz => isFiring = false;
+
+        playerActions.Player.FireMissile.performed += ctz => isFiringMissile = true;  // Nueva acción para disparar misiles
+        playerActions.Player.FireMissile.canceled += ctz => isFiringMissile = false; // Cuando se suelta la tecla
     }
 }
