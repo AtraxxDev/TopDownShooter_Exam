@@ -550,6 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 739b82d170d79be4c838643898553cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOpenShop: 0
 --- !u!114 &3915898181442518250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -578,6 +579,9 @@ MonoBehaviour:
   firePoint: {fileID: 8632704365284074021}
   fireRate: 0.2
   bulletPool: {fileID: 0}
+  missilePool: {fileID: 0}
+  missileCapacity: 2
+  currentMissiles: 2
 --- !u!114 &4177247621823461037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,7 +597,7 @@ MonoBehaviour:
   statsData: {fileID: 11400000, guid: 252d6deaeeb521a48b81483ce929c41b, type: 2}
   currentMaxHealth: 0
   currentShieldCapacity: 50
-  currentShieldRegenRate: 0.3
+  currentShieldRegenRate: 1
 --- !u!114 &5610985197924680857
 MonoBehaviour:
   m_ObjectHideFlags: 0

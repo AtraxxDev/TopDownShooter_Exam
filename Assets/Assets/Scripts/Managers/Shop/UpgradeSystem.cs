@@ -4,6 +4,7 @@ public static class UpgradeSystem
 {
     public static void ApplyUpgrade(PlayerHealth player, UpgradeType upgradeType, float amount)
     {
+        var playerAttack = player.GetComponent<PlayerAttack>();
         switch (upgradeType)
         {
             case UpgradeType.MaxHealth:
@@ -17,6 +18,12 @@ public static class UpgradeSystem
                 break;
             case UpgradeType.FullHeal:
                 player.RegenerateFullHealth();
+                break;
+            case UpgradeType.MissileCapacity:
+                playerAttack.AddMissileCapacity((int)amount); // Aumenta la capacidad de misiles
+                break;
+            case UpgradeType.MissileReload:
+                playerAttack.ReloadMissiles(); // Recarga todos los misiles
                 break;
         }
     }

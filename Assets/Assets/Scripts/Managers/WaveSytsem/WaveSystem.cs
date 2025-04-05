@@ -12,7 +12,7 @@ public class WaveSystem : MonoBehaviour
     [SerializeField] private float delayBeforeSpawn = 2f; // Tiempo de espera antes de empezar a spawnnear
     [SerializeField] private Transform[] spawnPoints; // Puntos de spawn predefinidos
 
-    private int waveId = 0;
+    public int waveId = 0;
     private int remainingEnemies = 0;
     private bool waveInProgress = false;
     private bool waitingForShop = false;
@@ -73,7 +73,6 @@ public class WaveSystem : MonoBehaviour
         enemyHealth.Initialize(waveData.enemyHealth);
         enemyController.SetDifficulty(waveData.enemySpeed, waveData.enemyDamage, waveData.enemyHealth);
 
-        // Desuscribirse antes de suscribirse para evitar múltiples suscripciones.
         enemyHealth.OnEnemyDeath -= HandleEnemyDeath;
         enemyHealth.OnEnemyDeath += HandleEnemyDeath;
     }
@@ -90,7 +89,7 @@ public class WaveSystem : MonoBehaviour
 
             Debug.Log($"Wave {waveId} completada. Abrir tienda...");
 
-            waitingForShop = true; // Se detiene el inicio de la siguiente oleada hasta que el jugador continúe
+            waitingForShop = true;
         }
     }
 

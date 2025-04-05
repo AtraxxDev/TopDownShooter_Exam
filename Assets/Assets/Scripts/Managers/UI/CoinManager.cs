@@ -41,6 +41,7 @@ public class CoinManager : MonoBehaviour
     {
         if (coins < amount) return;
         coins -= amount;
+        UpdateCoinDisplay();
         OnCoinsUpdated?.Invoke(coins);
     }
 

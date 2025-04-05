@@ -7,7 +7,7 @@ public class PoolManager : MonoBehaviour
     public int initialPoolSize = 10;
     public List<GameObject> createdObjects = new List<GameObject>();
 
-    public int maxPoolSize = 100; // Opcional: máximo de objetos que puede crear
+    public int maxPoolSize = 100;
 
     private void Start()
     {
@@ -42,7 +42,6 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        // Si todos están activos y aún no se llegó al límite, crea uno nuevo
         if (createdObjects.Count < maxPoolSize)
         {
             GameObject createdObject = Instantiate(prefabToCreate, positionToSpawn, Quaternion.identity);

@@ -10,8 +10,8 @@ public class PlayerAttack : MonoBehaviour, IAttackable
 
     private bool canShoot = true;
 
-    private int missileCapacity = 2; // Capacidad máxima de misiles
-    private int currentMissiles = 0; // Misiles actualmente disponibles
+    public int missileCapacity = 2; // Capacidad máxima de misiles
+    public int currentMissiles = 2; // Misiles actualmente disponibles (inicia con 2)
 
     public void SetAttackRate(float rate)
     {
@@ -29,7 +29,7 @@ public class PlayerAttack : MonoBehaviour, IAttackable
 
     public void AttackMissile()
     {
-        if (!canShoot || currentMissiles >= missileCapacity) return;
+        if (!canShoot || currentMissiles <= 0) return; 
 
         // Disparar un misil
         FireMissile();
@@ -38,27 +38,25 @@ public class PlayerAttack : MonoBehaviour, IAttackable
 
     private void FireMissile()
     {
-        // Disparar un misil desde el pool
         GameObject missile = missilePool.FireMissile(firePoint.position, firePoint.forward);
 
         if (missile != null)
         {
             missile.SetActive(true);
             missile.transform.position = firePoint.position;
-            missile.GetComponent<Missile>().Launch(firePoint.forward, missilePool); // Lanzar misil
-            currentMissiles++; // Incrementar los misiles disparados
+            missile.GetComponent<Missile>().Launch(firePoint.forward, missilePool);
+            ReduceMissileCount();
         }
     }
 
     public void AddMissileCapacity(int amount)
     {
-        missileCapacity += amount; // Aumentar la capacidad máxima de misiles
+        missileCapacity += amount;
     }
 
-    public void ReloadMissile(int amount)
+    public void ReloadMissiles()
     {
-        // Recargar misiles hasta el límite de la capacidad
-        currentMissiles = Mathf.Min(missileCapacity, currentMissiles + amount);
+        currentMissiles = missileCapacity; 
     }
 
     public IEnumerator AttackCooldown()
@@ -68,12 +66,11 @@ public class PlayerAttack : MonoBehaviour, IAttackable
         canShoot = true;
     }
 
-    // Método para reducir misiles cuando se recogen o explotan
     public void ReduceMissileCount()
     {
         if (currentMissiles > 0)
         {
-            currentMissiles--; // Disminuir la cantidad de misiles
+            currentMissiles--; 
         }
     }
 }

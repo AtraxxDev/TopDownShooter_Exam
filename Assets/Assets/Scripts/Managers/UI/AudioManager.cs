@@ -15,9 +15,21 @@ public class AudioManager : MonoBehaviour
     [Header("SFX Clips")]
     [SerializeField] private AudioClip[] sfxClips;
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); 
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject); 
+    }
+
     private void Start()
     {
-        PlayMusic(true);
+        PlayMusic(false);
     }
 
     public enum SFXType
@@ -26,14 +38,6 @@ public class AudioManager : MonoBehaviour
         Shoot,
         Explosion,
         Jump
-    }
-
-    private void Awake()
-    {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-
-        DontDestroyOnLoad(gameObject);
     }
 
     public void PlayMusic(bool isGameplay)
@@ -53,13 +57,11 @@ public class AudioManager : MonoBehaviour
         sfxSource.PlayOneShot(sfxClips[(int)sfxType]);
     }
 
-    // Detener un SFX específico
     public void StopSFX(SFXType sfxType)
     {
         sfxSource.Stop();
     }
 
-    // Verificar si un SFX ya está siendo reproducido
     public bool IsPlayingSFX(SFXType sfxType)
     {
         return sfxSource.isPlaying && sfxSource.clip == sfxClips[(int)sfxType];

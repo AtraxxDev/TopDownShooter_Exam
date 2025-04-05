@@ -21,7 +21,6 @@ public class UpgradeCard : MonoBehaviour
         playerAnimations = FindFirstObjectByType<PlayerAnimations>();
         upgradeButton.onClick.AddListener(BuyUpgrade);
         CoinManager.Instance.OnCoinsUpdated += UpdateUI; // Suscribirse al evento de monedas
-
     }
 
     private void OnDestroy()
@@ -47,10 +46,11 @@ public class UpgradeCard : MonoBehaviour
             case UpgradeType.ShieldCapacity: return $"Aumenta la cantidad máxima de escudo en: {upgradeAmount}";
             case UpgradeType.ShieldRegen: return $"Aumenta la velocidad de regeneración del escudo en: {upgradeAmount}";
             case UpgradeType.FullHeal: return "Regenera toda la vida";
+            case UpgradeType.MissileCapacity: return $"Aumenta la capacidad máxima de misiles en: {upgradeAmount}";
+            case UpgradeType.MissileReload: return "Recarga todos los misiles disponibles";
             default: return "Unknown Upgrade";
         }
     }
-
 
     private void BuyUpgrade()
     {
@@ -68,5 +68,7 @@ public enum UpgradeType
     MaxHealth,
     ShieldCapacity,
     ShieldRegen,
-    FullHeal
+    FullHeal,
+    MissileCapacity, 
+    MissileReload 
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MissilePool : PoolManager
 {
-    [SerializeField] private float missileSpeed = 8f;  // Velocidad del misil
+    [SerializeField] private float missileSpeed = 8f; 
 
     public GameObject FireMissile(Vector3 spawnPosition, Vector3 direction)
     {
@@ -14,11 +14,11 @@ public class MissilePool : PoolManager
 
         if (missileScript != null)
         {
-            missileScript.Launch(direction, this);  // Lanzar el misil
+            missileScript.Launch(direction, this);  
         }
 
-        rb.linearVelocity = direction * missileSpeed;  // Asignar la velocidad al misil
-        missile.transform.forward = direction;  // Asegurar que el misil mire en la direcci�n correcta
+        rb.linearVelocity = direction * missileSpeed; 
+        missile.transform.forward = direction; 
 
         return missile;
     }

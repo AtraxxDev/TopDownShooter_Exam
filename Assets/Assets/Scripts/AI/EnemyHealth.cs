@@ -9,7 +9,7 @@ public class EnemyHealth : MonoBehaviour, IDamagable
     public delegate void HealthChangedDelegate(float currentHealth);
     public event HealthChangedDelegate OnHealthChanged;
 
-    public event Action OnEnemyDeath;  // Evento para la muerte del enemigo
+    public event Action OnEnemyDeath; 
 
     public void Initialize(float health)
     {
@@ -36,9 +36,9 @@ public class EnemyHealth : MonoBehaviour, IDamagable
     {
         OnEnemyDeath?.Invoke();
 
-        if (UnityEngine.Random.Range(0f, 1f) <= 0.2f)
+        if (UnityEngine.Random.Range(0f, 1f) <= 0.4f)
         {
-            CoinManager.Instance.AddCoins(3); // Agregar 5 monedas al CoinManager
+            CoinManager.Instance.AddCoins(3); 
             // aqui iria el sonido de añadir una moneda
         }
 
